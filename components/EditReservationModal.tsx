@@ -67,7 +67,7 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
       seat: formData.seat,
       room: formData.room,
       name: formData.name,
-      phone: formData.phone,
+      phone: formData.phone || null,
       confirmer: formData.confirmer,
       memo: formData.memo || null,
     });
