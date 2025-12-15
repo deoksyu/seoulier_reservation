@@ -93,14 +93,14 @@ export default function TimePickerModal({ isOpen, onClose, onSelect, selectedTim
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">시간 선택</h2>
+      <div className="glass-effect rounded-2xl p-6 max-w-sm w-full shadow-2xl border border-gray-700" onClick={(e) => e.stopPropagation()}>
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">시간 선택</h2>
 
         <div className="flex gap-4 mb-6">
           <div className="flex-1">
-            <div className="text-center text-sm font-semibold text-gray-600 mb-2">시</div>
+            <div className="text-center text-sm font-semibold text-gray-400 mb-2">시</div>
             <div className="relative h-[280px] overflow-hidden">
-              <div className="absolute inset-x-0 top-[112px] h-[56px] border-y-2 border-blue-500 pointer-events-none z-10" />
+              <div className="absolute inset-x-0 top-[112px] h-[56px] border-y-2 border-green-500 pointer-events-none z-10" />
               <div
                 ref={hourRef}
                 className="h-full overflow-y-scroll scrollbar-hide"
@@ -116,7 +116,7 @@ export default function TimePickerModal({ isOpen, onClose, onSelect, selectedTim
                     key={h}
                     className="h-[56px] flex items-center justify-center text-2xl font-semibold snap-start"
                     style={{
-                      color: h === hour ? '#1d4ed8' : '#9ca3af',
+                      color: h === hour ? '#22c55e' : '#6b7280',
                       fontSize: h === hour ? '2rem' : '1.5rem',
                       transition: 'all 0.2s',
                     }}
@@ -129,12 +129,12 @@ export default function TimePickerModal({ isOpen, onClose, onSelect, selectedTim
             </div>
           </div>
 
-          <div className="flex items-center justify-center text-3xl font-bold text-gray-400">:</div>
+          <div className="flex items-center justify-center text-3xl font-bold text-gray-500">:</div>
 
           <div className="flex-1">
-            <div className="text-center text-sm font-semibold text-gray-600 mb-2">분</div>
+            <div className="text-center text-sm font-semibold text-gray-400 mb-2">분</div>
             <div className="relative h-[280px] overflow-hidden">
-              <div className="absolute inset-x-0 top-[112px] h-[56px] border-y-2 border-blue-500 pointer-events-none z-10" />
+              <div className="absolute inset-x-0 top-[112px] h-[56px] border-y-2 border-green-500 pointer-events-none z-10" />
               <div
                 ref={minuteRef}
                 className="h-full overflow-y-scroll scrollbar-hide"
@@ -150,7 +150,7 @@ export default function TimePickerModal({ isOpen, onClose, onSelect, selectedTim
                     key={m}
                     className="h-[56px] flex items-center justify-center text-2xl font-semibold snap-start"
                     style={{
-                      color: m === minute ? '#1d4ed8' : '#9ca3af',
+                      color: m === minute ? '#22c55e' : '#6b7280',
                       fontSize: m === minute ? '2rem' : '1.5rem',
                       transition: 'all 0.2s',
                     }}
@@ -167,13 +167,13 @@ export default function TimePickerModal({ isOpen, onClose, onSelect, selectedTim
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-4 text-lg font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="flex-1 py-4 text-lg font-semibold text-gray-300 glass-effect rounded-lg hover:bg-white/10 transition-colors border border-gray-700"
           >
             취소
           </button>
           <button
             onClick={handleConfirm}
-            className="flex-1 py-4 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex-1 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg hover:from-green-600 hover:to-green-700 transition-all shadow-lg shadow-green-500/25"
           >
             확인
           </button>

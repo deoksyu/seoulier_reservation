@@ -8,9 +8,11 @@ export type Database = {
           time: string;
           adults: number;
           children: number;
+          seat: string | null;
           room: string | null;
           name: string;
           phone: string;
+          confirmer: string | null;
           memo: string | null;
           status: 'reserved' | 'done' | 'cancelled';
           created_at: string;
@@ -21,9 +23,11 @@ export type Database = {
           time: string;
           adults: number;
           children: number;
+          seat?: string | null;
           room?: string | null;
           name: string;
           phone: string;
+          confirmer?: string | null;
           memo?: string | null;
           status?: 'reserved' | 'done' | 'cancelled';
           created_at?: string;
@@ -34,9 +38,11 @@ export type Database = {
           time?: string;
           adults?: number;
           children?: number;
+          seat?: string | null;
           room?: string | null;
           name?: string;
           phone?: string;
+          confirmer?: string | null;
           memo?: string | null;
           status?: 'reserved' | 'done' | 'cancelled';
           created_at?: string;

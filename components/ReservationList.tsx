@@ -150,17 +150,15 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
 
   const filteredReservations = getFilteredReservations();
 
-  const getTodayStats = () => {
-    const now = new Date();
-    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const todayReservations = reservations.filter(r => r.date === today && r.status === 'reserved');
+  const getDateStats = (dateString: string) => {
+    const dateReservations = reservations.filter(r => r.date === dateString && r.status === 'reserved');
     
-    const lunchReservations = todayReservations.filter(r => {
+    const lunchReservations = dateReservations.filter(r => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 11 && hour < 15;
     });
     
-    const dinnerReservations = todayReservations.filter(r => {
+    const dinnerReservations = dateReservations.filter(r => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 17 && hour < 21;
     });
@@ -175,46 +173,51 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
     };
   };
 
-  const todayStats = getTodayStats();
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const tomorrowDate = new Date(now);
+  tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+  const tomorrow = `${tomorrowDate.getFullYear()}-${String(tomorrowDate.getMonth() + 1).padStart(2, '0')}-${String(tomorrowDate.getDate()).padStart(2, '0')}`;
+
+  const todayStats = getDateStats(today);
+  const tomorrowStats = getDateStats(tomorrow);
 
   if (loading) {
     return <div className="text-center py-8 text-gray-600">로딩 중...</div>;
   }
 
+  const currentStats = filter === 'today' ? todayStats : filter === 'tomorrow' ? tomorrowStats : null;
+
   return (
     <div className="space-y-4">
-      {filter === 'today' && (todayStats.lunchTeams > 0 || todayStats.dinnerTeams > 0) && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 mb-6 shadow-sm border border-blue-100">
+      {(filter === 'today' || filter === 'tomorrow') && currentStats && (currentStats.lunchTeams > 0 || currentStats.dinnerTeams > 0) && (
+        <div className="glass-effect rounded-2xl p-6 mb-6 shadow-xl border border-gray-700">
           <div className="flex items-center justify-around">
             <div className="text-center">
-              <div className="text-xs font-semibold text-gray-500 mb-1">런치 예약</div>
+              <div className="text-xs font-semibold text-gray-400 mb-2">런치 예약</div>
               <div className="flex items-baseline gap-2 justify-center">
-                <span className="text-2xl font-bold text-green-600">{todayStats.lunchTeams}</span>
-                <span className="text-sm text-gray-600">팀</span>
-                <span className="text-gray-400">/</span>
-                <span className="text-2xl font-bold text-green-600">{todayStats.lunchAdults}</span>
-                {todayStats.lunchChildren > 0 && (
-                  <>
-                    <span className="text-lg font-bold text-green-500">+{todayStats.lunchChildren}</span>
-                  </>
+                <span className="text-3xl font-bold text-green-400">{currentStats.lunchTeams}</span>
+                <span className="text-sm text-gray-400">팀</span>
+                <span className="text-gray-600">/</span>
+                <span className="text-3xl font-bold text-green-400">{currentStats.lunchAdults}</span>
+                {currentStats.lunchChildren > 0 && (
+                  <span className="text-xl font-bold text-green-500">+{currentStats.lunchChildren}</span>
                 )}
-                <span className="text-sm text-gray-600">명</span>
+                <span className="text-sm text-gray-400">명</span>
               </div>
             </div>
-            <div className="h-12 w-px bg-gray-300"></div>
+            <div className="h-16 w-px bg-gradient-to-b from-transparent via-gray-600 to-transparent"></div>
             <div className="text-center">
-              <div className="text-xs font-semibold text-gray-500 mb-1">디너 예약</div>
+              <div className="text-xs font-semibold text-gray-400 mb-2">디너 예약</div>
               <div className="flex items-baseline gap-2 justify-center">
-                <span className="text-2xl font-bold text-red-600">{todayStats.dinnerTeams}</span>
-                <span className="text-sm text-gray-600">팀</span>
-                <span className="text-gray-400">/</span>
-                <span className="text-2xl font-bold text-red-600">{todayStats.dinnerAdults}</span>
-                {todayStats.dinnerChildren > 0 && (
-                  <>
-                    <span className="text-lg font-bold text-red-500">+{todayStats.dinnerChildren}</span>
-                  </>
+                <span className="text-3xl font-bold text-red-400">{currentStats.dinnerTeams}</span>
+                <span className="text-sm text-gray-400">팀</span>
+                <span className="text-gray-600">/</span>
+                <span className="text-3xl font-bold text-red-400">{currentStats.dinnerAdults}</span>
+                {currentStats.dinnerChildren > 0 && (
+                  <span className="text-xl font-bold text-red-500">+{currentStats.dinnerChildren}</span>
                 )}
-                <span className="text-sm text-gray-600">명</span>
+                <span className="text-sm text-gray-400">명</span>
               </div>
             </div>
           </div>
@@ -224,30 +227,30 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
       <div className="flex gap-3 mb-6">
         <button
           onClick={() => setFilter('today')}
-          className={`flex-1 py-3 px-4 text-lg font-semibold rounded-lg transition-colors ${
+          className={`flex-1 py-3 px-4 text-base font-semibold rounded-xl transition-all ${
             filter === 'today'
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
+              : 'glass-effect text-gray-300 border border-gray-700 hover:bg-white/10'
           }`}
         >
           오늘
         </button>
         <button
           onClick={() => setFilter('tomorrow')}
-          className={`flex-1 py-3 px-4 text-lg font-semibold rounded-lg transition-colors ${
+          className={`flex-1 py-3 px-4 text-base font-semibold rounded-xl transition-all ${
             filter === 'tomorrow'
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
+              : 'glass-effect text-gray-300 border border-gray-700 hover:bg-white/10'
           }`}
         >
           내일
         </button>
         <button
           onClick={() => setFilter('all')}
-          className={`flex-1 py-3 px-4 text-lg font-semibold rounded-lg transition-colors ${
+          className={`flex-1 py-3 px-4 text-base font-semibold rounded-xl transition-all ${
             filter === 'all'
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
+              : 'glass-effect text-gray-300 border border-gray-700 hover:bg-white/10'
           }`}
         >
           전체
@@ -266,35 +269,34 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
           {filteredReservations.map((reservation) => {
             const timeCategory = getTimeCategory(reservation.time);
             const headerColor = timeCategory === 'lunch' 
-              ? 'from-green-50 to-emerald-50' 
+              ? 'from-green-500/20 to-emerald-500/20' 
               : timeCategory === 'dinner'
-              ? 'from-red-50 to-rose-50'
-              : 'from-blue-50 to-indigo-50';
+              ? 'from-red-500/20 to-rose-500/20'
+              : 'from-blue-500/20 to-indigo-500/20';
             
             return (
               <div
                 key={reservation.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+                className="glass-effect rounded-2xl shadow-xl border border-gray-700 overflow-hidden hover:border-gray-600 transition-all"
               >
-                <div className={`bg-gradient-to-r ${headerColor} px-5 py-3 border-b border-gray-200`}>
+                <div className={`bg-gradient-to-r ${headerColor} px-5 py-3 border-b border-gray-700/50`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-gray-500">
-                        {timeCategory === 'lunch' ? '런치 예약' : timeCategory === 'dinner' ? '디너 예약' : '예약번호'}
+                      <span className="text-xs font-semibold text-gray-400">
+                        {timeCategory === 'lunch' ? '런치 예약' : timeCategory === 'dinner' ? '디너 예약' : '예약'}
                       </span>
-                      <span className="text-sm font-bold text-gray-900">{reservation.id.slice(0, 8).toUpperCase()}</span>
                     </div>
                     <span
-                      className={`px-3 py-1 text-xs font-bold rounded-full ${
+                      className={`px-3 py-1 text-xs font-bold rounded-xl shadow-lg ${
                         reservation.status === 'reserved'
                           ? timeCategory === 'lunch'
-                            ? 'bg-green-500 text-white'
+                            ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
                             : timeCategory === 'dinner'
-                            ? 'bg-red-500 text-white'
-                            : 'bg-blue-500 text-white'
+                            ? 'bg-gradient-to-r from-red-500 to-red-600 text-white'
+                            : 'bg-gradient-to-r from-blue-500 to-blue-600 text-white'
                           : reservation.status === 'done'
-                          ? 'bg-gray-400 text-white'
-                          : 'bg-red-500 text-white'
+                          ? 'bg-gray-600 text-white'
+                          : 'bg-red-600 text-white'
                       }`}
                     >
                       {getStatusText(reservation.status)}
@@ -302,62 +304,65 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
                   </div>
                 </div>
 
-              <div className="px-5 py-4 space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <div className="text-xs text-gray-500 mb-1">예약일</div>
-                    <div className="text-base font-bold text-gray-900">{reservation.date}</div>
-                  </div>
-                  <div>
-                    <div className="text-xs text-gray-500 mb-1">예약시간</div>
-                    <div className="text-base font-bold text-gray-900">{reservation.time}</div>
-                  </div>
-                </div>
-
+              <div className="px-5 py-4 space-y-3 bg-gray-800/30">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <div className="text-xs text-gray-500 mb-1">예약자</div>
-                    <div className="text-base font-bold text-gray-900">{reservation.name}</div>
+                    <div className="text-base font-bold text-white">{reservation.name}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-gray-500 mb-1">인원</div>
-                    <div className="text-base font-bold text-gray-900">
-                      {reservation.children > 0 ? `${reservation.adults}+${reservation.children}人` : `${reservation.adults}人`}
-                    </div>
+                    <div className="text-xs text-gray-500 mb-1">예약시간</div>
+                    <div className="text-base font-bold text-white">{reservation.time}</div>
                   </div>
                 </div>
 
-                {reservation.room && (
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <div className="text-xs text-gray-500 mb-1">룸 요청</div>
-                    <div className="text-base font-bold text-blue-600">{reservation.room}</div>
+                    <div className="text-xs text-gray-500 mb-1">인원</div>
+                    <div className="text-base font-bold text-white">
+                      {reservation.children > 0 ? `${reservation.adults}+${reservation.children}人` : `${reservation.adults}人`}
+                    </div>
                   </div>
-                )}
+                  {reservation.room ? (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">룸 요청</div>
+                      <div className="text-base font-bold text-green-400">{reservation.room}</div>
+                    </div>
+                  ) : reservation.seat ? (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">좌석</div>
+                      <div className="text-base font-bold text-blue-400">{reservation.seat}</div>
+                    </div>
+                  ) : null}
+                </div>
 
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">연락처</div>
-                  <div className="text-base font-medium text-gray-900">{reservation.phone}</div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">연락처</div>
+                    <div className="text-base font-medium text-gray-300">{reservation.phone}</div>
+                  </div>
+                  {reservation.confirmer && (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">확인자</div>
+                      <div className="text-base font-medium text-green-400">{reservation.confirmer}</div>
+                    </div>
+                  )}
                 </div>
 
                 {reservation.memo && (
                   <div>
                     <div className="text-xs text-gray-500 mb-1">메모</div>
-                    <div className="text-sm text-gray-700 bg-gray-50 rounded-lg px-3 py-2">{reservation.memo}</div>
+                    <div className="text-sm text-gray-300 bg-gray-900/50 rounded-lg px-3 py-2 border border-gray-700">{reservation.memo}</div>
                   </div>
                 )}
-
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">예약일시</div>
-                  <div className="text-xs text-gray-400">{new Date(reservation.created_at).toLocaleString('ko-KR')}</div>
-                </div>
               </div>
 
               {editable && (
-                <div className="px-5 pb-4">
+                <div className="px-5 pb-4 bg-gray-800/30">
                   <div className="flex gap-3">
                     <button
                       onClick={() => setEditingReservation(reservation)}
-                      className="flex-1 py-3 px-4 text-base font-bold text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors shadow-sm"
+                      className="flex-1 py-3 px-4 text-base font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg shadow-blue-500/25"
                     >
                       수정
                     </button>
@@ -367,7 +372,7 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
                           deleteReservation(reservation.id);
                         }
                       }}
-                      className="flex-1 py-3 px-4 text-base font-bold text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors shadow-sm"
+                      className="flex-1 py-3 px-4 text-base font-bold text-white bg-gradient-to-r from-red-500 to-red-600 rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg shadow-red-500/25"
                     >
                       예약 취소
                     </button>

@@ -60,13 +60,13 @@ export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPho
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-6 max-w-sm w-full" onClick={(e) => e.stopPropagation()}>
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 text-center">전화번호 입력</h2>
+      <div className="glass-effect rounded-2xl p-6 max-w-sm w-full shadow-2xl border border-gray-700" onClick={(e) => e.stopPropagation()}>
+        <h2 className="text-2xl font-bold text-white mb-4 text-center">전화번호 입력</h2>
 
         <div className="mb-6">
-          <div className="bg-gray-50 rounded-lg p-4 text-center">
+          <div className="bg-gray-800/50 rounded-lg p-4 text-center border border-gray-700">
             <div className="text-3xl font-bold h-12 flex items-center justify-center">
-              <span className={phoneDigits.length === 0 ? 'text-gray-400' : 'text-gray-900'}>
+              <span className={phoneDigits.length === 0 ? 'text-gray-500' : 'text-white'}>
                 {getDisplayPhone()}
               </span>
             </div>
@@ -79,7 +79,7 @@ export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPho
               key={num}
               type="button"
               onClick={() => handleNumberClick(num)}
-              className="h-16 text-2xl font-semibold text-gray-900 bg-gray-100 rounded-lg hover:bg-gray-200 active:bg-gray-300 transition-colors"
+              className="h-16 text-2xl font-semibold text-white glass-effect rounded-lg hover:bg-white/10 active:bg-white/20 transition-colors border border-gray-700"
             >
               {num}
             </button>
@@ -90,14 +90,14 @@ export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPho
           <button
             type="button"
             onClick={handleBackspace}
-            className="h-14 text-lg font-semibold text-gray-700 bg-yellow-100 rounded-lg hover:bg-yellow-200 active:bg-yellow-300 transition-colors"
+            className="h-14 text-lg font-semibold text-white bg-yellow-600/80 rounded-lg hover:bg-yellow-600 active:bg-yellow-700 transition-colors border border-yellow-500/50"
           >
             ← 지우기
           </button>
           <button
             type="button"
             onClick={handleClear}
-            className="h-14 text-lg font-semibold text-gray-700 bg-red-100 rounded-lg hover:bg-red-200 active:bg-red-300 transition-colors"
+            className="h-14 text-lg font-semibold text-white bg-red-600/80 rounded-lg hover:bg-red-600 active:bg-red-700 transition-colors border border-red-500/50"
           >
             초기화
           </button>
@@ -107,7 +107,7 @@ export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPho
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 py-4 text-lg font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="flex-1 py-4 text-lg font-semibold text-gray-300 glass-effect rounded-lg hover:bg-white/10 transition-colors border border-gray-700"
           >
             취소
           </button>
@@ -115,7 +115,7 @@ export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPho
             type="button"
             onClick={handleConfirm}
             disabled={phoneDigits.length < 8}
-            className="flex-1 py-4 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-lg hover:from-green-600 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all shadow-lg shadow-green-500/25 disabled:shadow-none"
           >
             확인
           </button>
