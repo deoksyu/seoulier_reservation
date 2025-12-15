@@ -6,7 +6,7 @@ interface PhoneInputModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelect: (phone: string) => void;
-  selectedPhone?: string;
+  selectedPhone?: string | null;
 }
 
 export default function PhoneInputModal({ isOpen, onClose, onSelect, selectedPhone }: PhoneInputModalProps) {
