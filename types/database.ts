@@ -11,7 +11,7 @@ export type Database = {
           seat: string | null;
           room: string | null;
           name: string;
-          phone: string;
+          phone: string | null;
           confirmer: string | null;
           memo: string | null;
           status: 'reserved' | 'done' | 'cancelled';
@@ -26,7 +26,7 @@ export type Database = {
           seat?: string | null;
           room?: string | null;
           name: string;
-          phone: string;
+          phone?: string | null;
           confirmer?: string | null;
           memo?: string | null;
           status?: 'reserved' | 'done' | 'cancelled';
@@ -41,7 +41,7 @@ export type Database = {
           seat?: string | null;
           room?: string | null;
           name?: string;
-          phone?: string;
+          phone?: string | null;
           confirmer?: string | null;
           memo?: string | null;
           status?: 'reserved' | 'done' | 'cancelled';

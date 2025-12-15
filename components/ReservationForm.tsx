@@ -188,7 +188,7 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-semibold text-gray-300 mb-2">
-            전화번호
+            전화번호 (선택)
           </label>
           <button
             type="button"
@@ -280,7 +280,7 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
 
       <button
         type="submit"
-        disabled={loading || !formData.date || !formData.time || formData.adults === 0 || !formData.name || !formData.phone}
+        disabled={loading || !formData.date || !formData.time || formData.adults === 0 || !formData.name}
         className="w-full py-4 px-6 text-lg font-bold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-xl hover:from-green-600 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all shadow-lg shadow-green-500/25 hover:shadow-green-500/40 disabled:shadow-none"
       >
         {loading ? '저장 중...' : '예약 추가'}

@@ -148,7 +148,7 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">전화번호</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">전화번호 (선택)</label>
               <button
                 type="button"
                 onClick={() => setIsPhoneModalOpen(true)}
@@ -240,7 +240,7 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
           <button
             type="button"
             onClick={handleSave}
-            disabled={!formData.date || !formData.time || formData.adults === 0 || !formData.name || !formData.phone}
+            disabled={!formData.date || !formData.time || formData.adults === 0 || !formData.name}
             className="flex-1 py-4 text-lg font-semibold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-xl hover:from-green-600 hover:to-green-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed transition-all shadow-lg shadow-green-500/25 disabled:shadow-none"
           >
             저장
