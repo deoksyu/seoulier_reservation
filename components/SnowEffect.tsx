@@ -1,8 +1,22 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SnowEffect() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // 모바일 환경 감지
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   useEffect(() => {
     const createSnowflake = () => {
       const snowflake = document.createElement('div');
@@ -13,7 +27,11 @@ export default function SnowEffect() {
       const duration = Math.random() * 5 + 8;
       snowflake.style.animationDuration = duration + 's';
       snowflake.style.opacity = (Math.random() * 0.6 + 0.4).toString();
-      snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+      
+      // 모바일에서는 눈송이 크기를 절반으로
+      const baseSize = isMobile ? 5 : 10;
+      const sizeVariation = isMobile ? 5 : 10;
+      snowflake.style.fontSize = Math.random() * sizeVariation + baseSize + 'px';
       
       document.getElementById('snow-container')?.appendChild(snowflake);
       
@@ -22,10 +40,11 @@ export default function SnowEffect() {
       }, duration * 1000);
     };
 
-    const interval = setInterval(createSnowflake, 200);
+    // 모바일에서는 눈송이 생성 빈도를 절반으로 (400ms)
+    const interval = setInterval(createSnowflake, isMobile ? 400 : 200);
     
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   return (
     <div 
