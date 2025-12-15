@@ -6,7 +6,9 @@ export type Database = {
           id: string;
           date: string;
           time: string;
-          people: number;
+          adults: number;
+          children: number;
+          room: string | null;
           name: string;
           phone: string;
           memo: string | null;
@@ -17,7 +19,9 @@ export type Database = {
           id?: string;
           date: string;
           time: string;
-          people: number;
+          adults: number;
+          children: number;
+          room?: string | null;
           name: string;
           phone: string;
           memo?: string | null;
@@ -28,7 +32,9 @@ export type Database = {
           id?: string;
           date?: string;
           time?: string;
-          people?: number;
+          adults?: number;
+          children?: number;
+          room?: string | null;
           name?: string;
           phone?: string;
           memo?: string | null;
