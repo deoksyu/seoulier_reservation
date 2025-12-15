@@ -34,7 +34,7 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
     seat: null as string | null,
     room: null as string | null,
     name: '',
-    phone: '',
+    phone: '' as string | null,
     confirmer: null as string | null,
     memo: '',
   });
@@ -49,7 +49,7 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
         seat: reservation.seat,
         room: reservation.room,
         name: reservation.name,
-        phone: reservation.phone,
+        phone: reservation.phone || '',
         confirmer: reservation.confirmer,
         memo: reservation.memo || '',
       });
