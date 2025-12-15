@@ -3,9 +3,11 @@ import { Reservation } from '@/types/database';
 
 const STORAGE_KEY = 'seoulier_reservations';
 
-const isProduction = process.env.NODE_ENV === 'production' && 
+// Vercel 배포 환경이거나 Supabase URL이 설정되어 있으면 Supabase 사용
+const isProduction = !!(
   process.env.NEXT_PUBLIC_SUPABASE_URL && 
-  !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder');
+  !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
+);
 
 const getLocalReservations = (): Reservation[] => {
   if (typeof window === 'undefined') return [];
