@@ -123,8 +123,8 @@ export default function TomorrowSummaryModal({ isOpen, onClose }: TomorrowSummar
                       <span className="flex-1">
                         <span className="font-bold">{reservation.name}</span> ({reservation.children > 0 ? `${reservation.adults}+${reservation.children}` : reservation.adults})
                       </span>
-                      {reservation.room && reservation.room.length > 0 ? (
-                        <span className="text-green-400 font-bold">{reservation.room.join(', ')}</span>
+                      {reservation.room && (Array.isArray(reservation.room) ? reservation.room.length > 0 : reservation.room) ? (
+                        <span className="text-green-400 font-bold">{Array.isArray(reservation.room) ? reservation.room.join(', ') : reservation.room}</span>
                       ) : reservation.seat ? (
                         <span className="text-blue-400 font-bold">{reservation.seat}</span>
                       ) : null}

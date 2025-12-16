@@ -61,16 +61,17 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
       const booked: string[] = [];
       
       reservations.forEach((reservation) => {
-        if (!reservation.room || reservation.room.length === 0) return;
+        if (!reservation.room) return;
         
         const resHour = parseInt(reservation.time.split(':')[0]);
         const resIsLunch = resHour >= 11 && resHour < 15;
         const resIsDinner = resHour >= 17 && resHour < 21;
         
-        console.log(`Reservation: ${reservation.room.join(', ')} at ${reservation.time} (hour: ${resHour}, isLunch: ${resIsLunch}, isDinner: ${resIsDinner})`);
+        const roomArray = Array.isArray(reservation.room) ? reservation.room : [reservation.room];
+        console.log(`Reservation: ${roomArray.join(', ')} at ${reservation.time} (hour: ${resHour}, isLunch: ${resIsLunch}, isDinner: ${resIsDinner})`);
         
         if ((isLunch && resIsLunch) || (isDinner && resIsDinner)) {
-          reservation.room.forEach((r: string) => {
+          roomArray.forEach((r: string) => {
             if (!booked.includes(r)) {
               booked.push(r);
               console.log(`Added ${r} to booked list`);

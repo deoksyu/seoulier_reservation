@@ -114,9 +114,9 @@ export default function DateReservationsModal({
                           {reservation.children > 0 ? `${reservation.adults}+${reservation.children}人` : `${reservation.adults}人`}
                         </span>
                       </div>
-                      {reservation.room && reservation.room.length > 0 && (
+                      {reservation.room && (Array.isArray(reservation.room) ? reservation.room.length > 0 : reservation.room) && (
                         <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                          {reservation.room.join(', ')}
+                          {Array.isArray(reservation.room) ? reservation.room.join(', ') : reservation.room}
                         </span>
                       )}
                     </div>
