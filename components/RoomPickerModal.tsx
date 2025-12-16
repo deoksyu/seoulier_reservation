@@ -7,20 +7,20 @@ import { Reservation } from '@/types/database';
 interface RoomPickerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (room: string | null) => void;
-  selectedRoom?: string | null;
+  onSelect: (room: string[] | null) => void;
+  selectedRoom?: string[] | null;
   selectedDate?: string;
   selectedTime?: string;
 }
 
 export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoom, selectedDate, selectedTime }: RoomPickerModalProps) {
-  const [room, setRoom] = useState<string | null>(null);
+  const [rooms, setRooms] = useState<string[]>([]);
   const [bookedRooms, setBookedRooms] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setRoom(selectedRoom || null);
+      setRooms(selectedRoom || []);
       if (selectedDate && selectedTime) {
         checkBookedRooms();
       } else {
@@ -61,19 +61,21 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
       const booked: string[] = [];
       
       reservations.forEach((reservation) => {
-        if (!reservation.room) return;
+        if (!reservation.room || reservation.room.length === 0) return;
         
         const resHour = parseInt(reservation.time.split(':')[0]);
         const resIsLunch = resHour >= 11 && resHour < 15;
         const resIsDinner = resHour >= 17 && resHour < 21;
         
-        console.log(`Reservation: ${reservation.room} at ${reservation.time} (hour: ${resHour}, isLunch: ${resIsLunch}, isDinner: ${resIsDinner})`);
+        console.log(`Reservation: ${reservation.room.join(', ')} at ${reservation.time} (hour: ${resHour}, isLunch: ${resIsLunch}, isDinner: ${resIsDinner})`);
         
         if ((isLunch && resIsLunch) || (isDinner && resIsDinner)) {
-          if (!booked.includes(reservation.room)) {
-            booked.push(reservation.room);
-            console.log(`Added ${reservation.room} to booked list`);
-          }
+          reservation.room.forEach((r: string) => {
+            if (!booked.includes(r)) {
+              booked.push(r);
+              console.log(`Added ${r} to booked list`);
+            }
+          });
         }
       });
       
@@ -88,19 +90,25 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
 
   if (!isOpen) return null;
 
-  const rooms = ['B1', 'B2', 'A1'];
+  const availableRooms = ['B1', 'B2', 'A1'];
 
   const handleRoomClick = (selectedRoom: string) => {
-    setRoom(selectedRoom);
+    setRooms(prev => {
+      if (prev.includes(selectedRoom)) {
+        return prev.filter(r => r !== selectedRoom);
+      } else {
+        return [...prev, selectedRoom];
+      }
+    });
   };
 
   const handleConfirm = () => {
-    onSelect(room);
+    onSelect(rooms.length > 0 ? rooms : null);
     onClose();
   };
 
   const handleNoRoom = () => {
-    setRoom(null);
+    setRooms([]);
   };
 
   return (
@@ -113,7 +121,7 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
             type="button"
             onClick={handleNoRoom}
             className={`w-full py-4 px-6 text-lg font-semibold rounded-lg transition-all ${
-              room === null
+              rooms.length === 0
                 ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
                 : 'glass-effect text-gray-300 border border-gray-700 hover:bg-white/10'
             }`}
@@ -121,7 +129,7 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
             룸 요청 없음
           </button>
           
-          {rooms.map((r) => {
+          {availableRooms.map((r) => {
             const isBooked = bookedRooms.includes(r);
             return (
               <button
@@ -132,7 +140,7 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
                 className={`w-full py-4 px-6 text-lg font-semibold rounded-lg transition-all relative ${
                   isBooked
                     ? 'bg-gray-800/50 text-gray-600 border border-gray-800 cursor-not-allowed opacity-40'
-                    : room === r
+                    : rooms.includes(r)
                     ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg shadow-green-500/25'
                     : 'glass-effect text-gray-300 border border-gray-700 hover:bg-white/10'
                 }`}

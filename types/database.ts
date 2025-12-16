@@ -9,7 +9,7 @@ export type Database = {
           adults: number;
           children: number;
           seat: string | null;
-          room: string | null;
+          room: string[] | null;
           name: string;
           phone: string | null;
           confirmer: string | null;
@@ -24,7 +24,7 @@ export type Database = {
           adults: number;
           children: number;
           seat?: string | null;
-          room?: string | null;
+          room?: string[] | null;
           name: string;
           phone?: string | null;
           confirmer?: string | null;
@@ -39,7 +39,7 @@ export type Database = {
           adults?: number;
           children?: number;
           seat?: string | null;
-          room?: string | null;
+          room?: string[] | null;
           name?: string;
           phone?: string | null;
           confirmer?: string | null;

@@ -29,7 +29,7 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
     adults: 0,
     children: 0,
     seat: null as string | null,
-    room: null as string | null,
+    room: null as string[] | null,
     name: '',
     phone: '',
     confirmer: null as string | null,
@@ -49,7 +49,7 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
         seat: formData.seat,
         room: formData.room,
         name: formData.name,
-        phone: formData.phone || null,
+        phone: formData.phone.trim() || null,
         confirmer: formData.confirmer,
         memo: formData.memo || null,
         status: 'reserved',
@@ -253,8 +253,8 @@ export default function ReservationForm({ onSuccess }: ReservationFormProps) {
                 : 'bg-gray-800/50 hover:bg-gray-700/50'
             }`}
           >
-            {formData.room ? (
-              <span className="text-white font-medium">{formData.room}</span>
+            {formData.room && formData.room.length > 0 ? (
+              <span className="text-white font-medium">{formData.room.join(', ')}</span>
             ) : (
               <span className="text-gray-500">
                 {!formData.date || !formData.time ? '날짜와 시간을 먼저 선택하세요' : '룸 선택'}
