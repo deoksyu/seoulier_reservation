@@ -20,6 +20,20 @@ const setLocalReservations = (reservations: Reservation[]) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(reservations));
 };
 
+const normalizeRoom = (room: any): string[] | null => {
+  if (!room) return null;
+  if (Array.isArray(room)) return room;
+  if (typeof room === 'string') {
+    try {
+      const parsed = JSON.parse(room);
+      return Array.isArray(parsed) ? parsed : [room];
+    } catch {
+      return [room];
+    }
+  }
+  return null;
+};
+
 export const storage = {
   async getReservations() {
     if (isProduction) {
@@ -30,7 +44,11 @@ export const storage = {
         .order('time', { ascending: true });
       
       if (error) throw error;
-      return data || [];
+      const normalized = (data || []).map(r => ({
+        ...r,
+        room: normalizeRoom(r.room)
+      }));
+      return normalized;
     } else {
       return getLocalReservations();
     }

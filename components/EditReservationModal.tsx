@@ -206,8 +206,8 @@ export default function EditReservationModal({ isOpen, onClose, onSave, reservat
                     : 'bg-gray-800/50 hover:bg-gray-700/50'
                 }`}
               >
-                {formData.room && (Array.isArray(formData.room) ? formData.room.length > 0 : formData.room) ? (
-                  <span className="text-white font-medium">{Array.isArray(formData.room) ? formData.room.join(', ') : formData.room}</span>
+                {formData.room && formData.room.length > 0 ? (
+                  <span className="text-white font-medium">{formData.room.join(', ')}</span>
                 ) : (
                   <span className="text-gray-400">
                     {!formData.date || !formData.time ? '날짜와 시간을 먼저 선택하세요' : '룸 선택'}

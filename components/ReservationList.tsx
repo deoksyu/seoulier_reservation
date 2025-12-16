@@ -323,10 +323,10 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
                       {reservation.children > 0 ? `${reservation.adults}+${reservation.children}人` : `${reservation.adults}人`}
                     </div>
                   </div>
-                  {reservation.room && (Array.isArray(reservation.room) ? reservation.room.length > 0 : reservation.room) ? (
+                  {reservation.room && reservation.room.length > 0 ? (
                     <div>
                       <div className="text-xs text-gray-500 mb-1">룸 요청</div>
-                      <div className="text-base font-bold text-green-400">{Array.isArray(reservation.room) ? reservation.room.join(', ') : reservation.room}</div>
+                      <div className="text-base font-bold text-green-400">{reservation.room.join(', ')}</div>
                     </div>
                   ) : reservation.seat ? (
                     <div>
