@@ -22,14 +22,14 @@ export default function TodaySummaryModal({ isOpen, onClose }: TodaySummaryModal
   const fetchTodayReservations = async () => {
     setLoading(true);
     try {
-      const allReservations = await storage.getReservations();
+      const allReservations: Reservation[] = await storage.getReservations();
       
-      const today = new Date();
-      const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
       
       const todayReservations = allReservations
-        .filter(r => r.date === todayString && r.status === 'reserved')
-        .sort((a, b) => a.time.localeCompare(b.time));
+        .filter((r: Reservation) => r.date === today && r.status === 'reserved')
+        .sort((a: Reservation, b: Reservation) => a.time.localeCompare(b.time));
       
       setReservations(todayReservations);
     } catch (error) {
@@ -49,23 +49,23 @@ export default function TodaySummaryModal({ isOpen, onClose }: TodaySummaryModal
   };
 
   const getStats = () => {
-    const lunchReservations = reservations.filter(r => {
+    const lunchReservations = reservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 11 && hour < 15;
     });
     
-    const dinnerReservations = reservations.filter(r => {
+    const dinnerReservations = reservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 17 && hour < 21;
     });
     
     return {
       lunchTeams: lunchReservations.length,
-      lunchAdults: lunchReservations.reduce((sum, r) => sum + r.adults, 0),
-      lunchChildren: lunchReservations.reduce((sum, r) => sum + r.children, 0),
+      lunchAdults: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      lunchChildren: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
       dinnerTeams: dinnerReservations.length,
-      dinnerAdults: dinnerReservations.reduce((sum, r) => sum + r.adults, 0),
-      dinnerChildren: dinnerReservations.reduce((sum, r) => sum + r.children, 0),
+      dinnerAdults: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      dinnerChildren: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
     };
   };
 
@@ -99,7 +99,7 @@ export default function TodaySummaryModal({ isOpen, onClose }: TodaySummaryModal
         ) : (
           <>
             <div className="space-y-3 mb-8">
-              {reservations.map((reservation, index) => {
+              {reservations.map((reservation: Reservation, index: number) => {
                 const hour = parseInt(reservation.time.split(':')[0]);
                 const isLunch = hour >= 11 && hour < 15;
                 const isDinner = hour >= 17 && hour < 21;

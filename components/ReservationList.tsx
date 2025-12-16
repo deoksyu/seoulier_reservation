@@ -151,25 +151,25 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
   const filteredReservations = getFilteredReservations();
 
   const getDateStats = (dateString: string) => {
-    const dateReservations = reservations.filter(r => r.date === dateString && r.status === 'reserved');
+    const dateReservations = reservations.filter((r: Reservation) => r.date === dateString && r.status === 'reserved');
     
-    const lunchReservations = dateReservations.filter(r => {
+    const lunchReservations = dateReservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 11 && hour < 15;
     });
     
-    const dinnerReservations = dateReservations.filter(r => {
+    const dinnerReservations = dateReservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 17 && hour < 21;
     });
     
     return {
       lunchTeams: lunchReservations.length,
-      lunchAdults: lunchReservations.reduce((sum, r) => sum + r.adults, 0),
-      lunchChildren: lunchReservations.reduce((sum, r) => sum + r.children, 0),
+      lunchAdults: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      lunchChildren: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
       dinnerTeams: dinnerReservations.length,
-      dinnerAdults: dinnerReservations.reduce((sum, r) => sum + r.adults, 0),
-      dinnerChildren: dinnerReservations.reduce((sum, r) => sum + r.children, 0),
+      dinnerAdults: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      dinnerChildren: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
     };
   };
 

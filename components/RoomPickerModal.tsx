@@ -53,7 +53,7 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
     try {
       const allReservations = await storage.getReservations();
       const reservations = allReservations.filter(
-        r => r.date === selectedDate && r.status === 'reserved'
+        (r: Reservation) => r.date === selectedDate && r.status === 'reserved'
       );
       
       console.log('Fetched reservations:', reservations);
@@ -93,9 +93,9 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
   const availableRooms = ['B1', 'B2', 'A1'];
 
   const handleRoomClick = (selectedRoom: string) => {
-    setRooms(prev => {
+    setRooms((prev: string[]) => {
       if (prev.includes(selectedRoom)) {
-        return prev.filter(r => r !== selectedRoom);
+        return prev.filter((r: string) => r !== selectedRoom);
       } else {
         return [...prev, selectedRoom];
       }

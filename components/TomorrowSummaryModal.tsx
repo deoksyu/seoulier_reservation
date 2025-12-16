@@ -22,17 +22,14 @@ export default function TomorrowSummaryModal({ isOpen, onClose }: TomorrowSummar
   const fetchTomorrowReservations = async () => {
     setLoading(true);
     try {
-      const allReservations = await storage.getReservations();
+      const allReservations: Reservation[] = await storage.getReservations();
       
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowString = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+      const tomorrowDate = new Date();
+      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+      const tomorrow = `${tomorrowDate.getFullYear()}-${String(tomorrowDate.getMonth() + 1).padStart(2, '0')}-${String(tomorrowDate.getDate()).padStart(2, '0')}`;
       
-      const tomorrowReservations = allReservations
-        .filter(r => r.date === tomorrowString && r.status === 'reserved')
-        .sort((a, b) => a.time.localeCompare(b.time));
-      
-      setReservations(tomorrowReservations);
+      const tomorrowReservations = allReservations.filter((r: Reservation) => r.date === tomorrow && r.status === 'reserved');
+      setReservations(tomorrowReservations.sort((a: Reservation, b: Reservation) => a.time.localeCompare(b.time)));
     } catch (error) {
       console.error('Error fetching reservations:', error);
     } finally {
@@ -51,23 +48,23 @@ export default function TomorrowSummaryModal({ isOpen, onClose }: TomorrowSummar
   };
 
   const getStats = () => {
-    const lunchReservations = reservations.filter(r => {
+    const lunchReservations = reservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 11 && hour < 15;
     });
     
-    const dinnerReservations = reservations.filter(r => {
+    const dinnerReservations = reservations.filter((r: Reservation) => {
       const hour = parseInt(r.time.split(':')[0]);
       return hour >= 17 && hour < 21;
     });
     
     return {
       lunchTeams: lunchReservations.length,
-      lunchAdults: lunchReservations.reduce((sum, r) => sum + r.adults, 0),
-      lunchChildren: lunchReservations.reduce((sum, r) => sum + r.children, 0),
+      lunchAdults: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      lunchChildren: lunchReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
       dinnerTeams: dinnerReservations.length,
-      dinnerAdults: dinnerReservations.reduce((sum, r) => sum + r.adults, 0),
-      dinnerChildren: dinnerReservations.reduce((sum, r) => sum + r.children, 0),
+      dinnerAdults: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.adults, 0),
+      dinnerChildren: dinnerReservations.reduce((sum: number, r: Reservation) => sum + r.children, 0),
     };
   };
 
@@ -101,7 +98,7 @@ export default function TomorrowSummaryModal({ isOpen, onClose }: TomorrowSummar
         ) : (
           <>
             <div className="space-y-3 mb-8">
-              {reservations.map((reservation, index) => {
+              {reservations.map((reservation: Reservation, index: number) => {
                 const hour = parseInt(reservation.time.split(':')[0]);
                 const isLunch = hour >= 11 && hour < 15;
                 const isDinner = hour >= 17 && hour < 21;
