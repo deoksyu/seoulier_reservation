@@ -67,14 +67,14 @@ export default function RoomPickerModal({ isOpen, onClose, onSelect, selectedRoo
         const resIsLunch = resHour >= 11 && resHour < 15;
         const resIsDinner = resHour >= 17 && resHour < 21;
         
-        const roomArray = Array.isArray(reservation.room) ? reservation.room : [reservation.room];
+        const roomArray: string[] = Array.isArray(reservation.room) ? reservation.room : [reservation.room];
         console.log(`Reservation: ${roomArray.join(', ')} at ${reservation.time} (hour: ${resHour}, isLunch: ${resIsLunch}, isDinner: ${resIsDinner})`);
         
         if ((isLunch && resIsLunch) || (isDinner && resIsDinner)) {
           roomArray.forEach((r: string) => {
             if (!booked.includes(r)) {
               booked.push(r);
-              console.log(`Added ${r} to booked list`);
+              console.log(`Added ${JSON.stringify(r)} to booked list`);
             }
           });
         }
