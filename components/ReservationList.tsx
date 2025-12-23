@@ -79,6 +79,11 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
     setSelectedDate(date);
   };
 
+  const handleDateModalEdit = (reservation: Reservation) => {
+    setSelectedDate(null);
+    setEditingReservation(reservation);
+  };
+
   const handleDateModalDelete = async (id: string) => {
     await deleteReservation(id);
     if (selectedDate) {
@@ -397,7 +402,7 @@ export default function ReservationList({ editable = false, refreshTrigger = 0 }
         onClose={() => setSelectedDate(null)}
         date={selectedDate || ''}
         reservations={dateModalReservations}
-        onEdit={editable ? setEditingReservation : undefined}
+        onEdit={editable ? handleDateModalEdit : undefined}
         onDelete={editable ? handleDateModalDelete : undefined}
       />
     </div>
