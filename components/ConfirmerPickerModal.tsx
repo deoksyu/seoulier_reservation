@@ -17,8 +17,8 @@ export default function ConfirmerPickerModal({
 
   const confirmers = [
     '박주성',
-    '강다슬',
-    '하새별',
+    '김소희',
+    '채승기',
     '이수진',
     '배경현',
     '채윤아',
