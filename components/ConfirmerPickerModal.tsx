@@ -17,13 +17,10 @@ export default function ConfirmerPickerModal({
 
   const confirmers = [
     '박주성',
-    '김소희',
-    '유영훈',
-    '이수진',
     '배경현',
     '채윤아',
-    '황성윤',
-    '임수민',
+    '조준민',
+    '김태오',
     '기타'
   ];
 
